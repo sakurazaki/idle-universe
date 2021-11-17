@@ -1,0 +1,7 @@
+{
+  "parser": "postcss-less",
+  "map": false,
+  "plugins": {
+    "postcss-plugin": {}
+  }
+}
