@@ -22,13 +22,11 @@
 
 <script>
 
-const evolution = {
-  name: 'evolution',
+export default {
+  // eslint-disable-next-line
+  name: 'Evolution',
   props: ['race']
 }
-
-export { evolution }
-export default evolution
 </script>
 
 <style scoped>

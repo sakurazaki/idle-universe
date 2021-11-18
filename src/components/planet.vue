@@ -5,13 +5,11 @@
 </template>
 
 <script>
-const Planet = {
+export default {
+  // eslint-disable-next-line
   name: 'Planet',
   props: ['planet']
 }
-
-export { Planet }
-export default Planet
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

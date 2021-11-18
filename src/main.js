@@ -2,7 +2,6 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 import PopperTooltip from './components/popper.vue'
-//import Popper from "vue3-popper";
 
 require('bootstrap-icons/font/bootstrap-icons.css')
 

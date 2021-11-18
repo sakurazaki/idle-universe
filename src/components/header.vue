@@ -16,14 +16,9 @@
 </template>
 
 <script>
-const Header = {
+export default {
+  // eslint-disable-next-line
   name: 'Header',
   props: ['game']
 }
-
-export { Header }
-export default Header
 </script>
-
-<style scoped>
-</style>

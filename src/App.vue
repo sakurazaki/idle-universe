@@ -6,9 +6,8 @@
 <script>
 import { get_game } from './game/main'
 
-import { Header } from './components/header'
-
-import { OozeStage } from './stages/ooze/index'
+import Header from './components/header'
+import OozeStage from './stages/ooze/index'
 
 export default {
   name: 'App',

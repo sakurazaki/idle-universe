@@ -22,37 +22,35 @@
 </template>
 
 <script>
-  const actions = {
-    name: 'actions',
-    props: ['stage'],
-    data() {
-      return {
-        popperShow: false,
-        popperDesc: '',
-        popperRef: null,
-        popperHTML: false
-      };
+export default {
+  // eslint-disable-next-line
+  name: 'Actions',
+  props: ['stage'],
+  data() {
+    return {
+      popperShow: false,
+      popperDesc: '',
+      popperRef: null,
+      popperHTML: false
+    };
+  },
+  methods: {
+    showPopper(action, row, index){
+      this.popperDesc = action.description;
+      this.popperRef = `action-${row}_${index}`;
+      this.popperHTML = action.ishtml;
     },
-    methods: {
-      showPopper(action, row, index){
-        this.popperDesc = action.description;
-        this.popperRef = `action-${row}_${index}`;
-        this.popperHTML = action.ishtml;
-      },
-      hidePopper(){
-        this.popperDesc = '';
-        this.popperRef = null;
-        this.popperHTML = false;
-      },
-      onClick(action){
-        if(!action.disabled)
-          action.execute();
-      }
+    hidePopper(){
+      this.popperDesc = '';
+      this.popperRef = null;
+      this.popperHTML = false;
+    },
+    onClick(action){
+      if(!action.disabled)
+        action.execute();
     }
   }
-
-  export { actions }
-  export default actions
+}
 </script>
 
 <style scoped>

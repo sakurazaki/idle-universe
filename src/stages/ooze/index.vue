@@ -2,12 +2,12 @@
   <div id="oozestage" class="oozestage">
 
     <div id="evolution-stats" class="evolution">
-      <evolution :race="game.race" />
+      <Evolution :race="game.race" />
     </div>
 
     <div id="actions" class="actions">
-      <evolution_bar :stage="game.stage" />
-      <actions :stage="game.stage" />
+      <EvolutionBar :stage="game.stage" />
+      <Actions :stage="game.stage" />
     </div>
 
     <div id="info" class="info">
@@ -19,23 +19,17 @@ a
 
 <script>
   
-import { evolution } from './evolution'
-import { evolution_bar } from './progress'
-import { actions } from './actions'
+import Evolution from './evolution'
+import EvolutionBar from './progress'
+import Actions from './actions'
 
-const OozeStage = {
+export default {
   name: 'OozeStage',
   props: ['game'],
   components: {
-    evolution,
-    evolution_bar,
-    actions
+    Evolution,
+    EvolutionBar,
+    Actions
   }
 }
-
-export { OozeStage }
-export default OozeStage
 </script>
-
-<style scoped>
-</style>

@@ -10,8 +10,8 @@
 
 <script>
 
-const evolution_bar = {
-  name: 'evolution',
+export default {
+  name: 'EvolutionBar',
   props: ['stage'],
   methods: {
     getPlantWidth(){
@@ -25,9 +25,6 @@ const evolution_bar = {
     }
   }
 }
-
-export { evolution_bar }
-export default evolution_bar
 </script>
 
 <style scoped>

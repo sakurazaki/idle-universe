@@ -11,7 +11,7 @@
 <script>
 import Popper from 'popper.js'
 
-const PopperTooltip = {
+export default {
   name: 'PopperTooltip',
   props: ['open', 'refEl', 'desc', 'offset', 'ishtml'],
   data() {
@@ -37,9 +37,6 @@ const PopperTooltip = {
     });
   }
 }
-
-export { PopperTooltip }
-export default PopperTooltip
 </script>
 
 <style scoped>
