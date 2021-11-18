@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
-    "vue": "^3.2.13"
+    "vue": "^3.2.13",
+    "vue3-popper": "^1.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -23,10 +24,10 @@
     "file-loader": "^6.2.0",
     "less": "^4.1.2",
     "less-loader": "^10.2.0",
+    "popper.js": "^1.16.1",
     "postcss-less": "^5.0.0",
     "postcss-loader": "^6.2.0",
-    "postcss-plugin": "^1.0.0",
-    "sugarss": "^4.0.1"
+    "postcss-plugin": "^1.0.0"
   },
   "eslintConfig": {
     "root": true,

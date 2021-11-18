@@ -3,33 +3,56 @@
 
     <div class="group" v-for="(group, i) in stage.actions" v-bind:key="i">
       <div class="title">{{ group.name }}</div>
-
+  
       <div class="action-group">
-        <div class="action" v-for="(action, j) in group.actions" v-bind:key="j" v-bind:class="action.color">
-          <button type="button" class="action-button" @click="onClick(action)">
+        <div class="action" v-for="(action, j) in group.actions" v-bind:key="`action-${i}_${j}`"
+          v-bind:class="[action.disabled ? 'disabled' : action.color]">
+          <button type="button" :ref="`action-${i}_${j}`" class="action-button" @click="onClick(action)"
+            @mouseover="showPopper(action, i, j)" @mouseleave="hidePopper()">
             {{ action.name }}
           </button>
         </div>
       </div>
+
     </div>
 
+    <Popper v-if="popperRef" :refEl="$refs[popperRef]" :desc="popperDesc" :ishtml="popperHTML" />
+    
   </div>
 </template>
 
 <script>
-
-const actions = {
-  name: 'actions',
-  props: ['stage'],
-  methods: {
-    onClick(action){
-      action.execute();
+  const actions = {
+    name: 'actions',
+    props: ['stage'],
+    data() {
+      return {
+        popperShow: false,
+        popperDesc: '',
+        popperRef: null,
+        popperHTML: false
+      };
+    },
+    methods: {
+      showPopper(action, row, index){
+        this.popperDesc = action.description;
+        this.popperRef = `action-${row}_${index}`;
+        this.popperHTML = action.ishtml;
+      },
+      hidePopper(){
+        this.popperDesc = '';
+        this.popperRef = null;
+        this.popperHTML = false;
+      },
+      onClick(action){
+        if(!action.disabled)
+          action.execute();
+      }
     }
   }
-}
 
-export { actions }
-export default actions
+  export { actions }
+  export default actions
 </script>
 
 <style scoped>
@@ -37,9 +60,17 @@ export default actions
     margin-top: 1rem;
   }
 
+  .group {
+    margin-top: 1rem;
+  }
+
+  .group:first-child {
+    margin-top: 0;
+  }
+
   .group > .title {
     font-family: "Ubuntu";
-    color: #7ea6ff;
+    color: #f3c82d;
     font-weight: 600;
     padding-bottom: .2rem;
     margin-bottom: 1rem;
@@ -88,5 +119,28 @@ export default actions
 
   .action.red button:hover {
     background-color: #ff000075;
+  }
+
+  .action.grad-gr button {
+    background: linear-gradient(153deg, rgb(0 255 0 / 46%) 0%, rgb(255 0 0 / 44%) 100%);
+    border: 1px solid gold;
+  }
+
+  .action.grad-gr button:hover {
+    background: linear-gradient(153deg, rgba(0,255,0,1) 0%, rgba(255,0,0,1) 100%);
+  }
+
+  .action button.disabled {
+    color: white;
+    background-color: #222;
+    border: 1px solid black;
+    text-decoration: line-through;
+  }
+
+  .action button.disabled {
+    color: white;
+    background-color: #222;
+    border: 1px solid black;
+    text-decoration: line-through;
   }
 </style>
