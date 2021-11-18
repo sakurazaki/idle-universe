@@ -1,25 +1,113 @@
+// eslint-disable-next-line
 import { app } from '../../main'
 
-import { OozeEatPlant, OozeHunt, EvolveHerbivore, EvolveCarnivore, EvolveOmnivore } from '../models/action'
 import { encyclopedia } from '../encyclopedia'
+import {
+	Awake,
+	EatCell,
+	AbsorbLight,
+	OxidateChemicals,
+	OozeEatPlant,
+	OozeHunt,
+	EvolveHerbivore,
+	EvolveCarnivore,
+	EvolveOmnivore
+} from './protoplasm_actions'
+
+
+const ProtoPhase = {
+	KINGDOM: 'kingdom',
+	FOOD: 'food'
+}
 
 class ProtoplasmPhase {
 	constructor(){
 		this.name = 'Protoplasm';
 
-		this._plants_eaten = 0;
-		this._proto_killed = 0;
+		this.stage = ProtoPhase.KINGDOM;
+		this._step = 0;
 
+		// This controls the progress bar
+		this.show_progress = false;
+		this.progress = {};
+
+		// Actions shown on the screen
 		this.actions = {
-			grow: {
-				name: "Grow",
-				actions: [new OozeEatPlant(), new OozeHunt()]
+			explore: {
+				name: 'Explore',
+				description: 'A small cell living in a microscopic world.<br />Your first steps into an adventure of evolution begin.',
+				actions: [new Awake()]
 			}
 		};
 
-		this.evo_1_progress = 50;
+		// Kingdom stage
+
+		// Step 1
+		this._cells_eaten = 0;
+		this._light_absorbed = 0;
+		this._chemical_oxidated = 0;
+		this._evo_1_progress = 50;
+
+		// Step 2
+		this._plants_eaten = 0;
+		this._proto_killed = 0;
+		
 	}
 
+	// Step regulator
+	get step(){
+		return this._step;
+	}
+
+	set step(value){
+		this._step = value;
+
+		if(this._step == 1){
+			this._setup_step_1();
+		}
+	}
+
+	// Kingdom - Step 1
+	get cells_eaten(){
+		return this._cells_eaten;
+	}
+
+	set cells_eaten(value){
+		this._cells_eaten = value;
+
+		// check evolution
+		if(this._cells_eaten + this._light_absorbed + this._chemical_oxidated >= this._evo_1_progress){
+			this._setup_step_1_2();
+		}
+	}
+
+	get light_absorbed(){
+		return this._light_absorbed;
+	}
+
+	set light_absorbed(value){
+		this._light_absorbed = value;
+
+		// check evolution
+		if(this._cells_eaten + this._light_absorbed + this._chemical_oxidated >= this._evo_1_progress){
+			this._setup_step_1_2();
+		}
+	}
+
+	get chemical_oxidated(){
+		return this._chemical_oxidated;
+	}
+
+	set chemical_oxidated(value){
+		this._chemical_oxidated = value;
+
+		// check evolution
+		if(this._cells_eaten + this._light_absorbed + this._chemical_oxidated >= this._evo_1_progress){
+			this._setup_step_1_2();
+		}
+	}
+
+	// Step 2
 	get plants_eaten(){
 		return this._plants_eaten;
 	}
@@ -28,7 +116,7 @@ class ProtoplasmPhase {
 		this._plants_eaten = val;
 
 		// check for evolution
-		if(this._plants_eaten + this._proto_killed >= this.evo_1_progress){
+		if(this._plants_eaten + this._proto_killed >= this._evo_1_progress){
 			this._prepare_food_evolution();
 		}
 	}
@@ -41,8 +129,51 @@ class ProtoplasmPhase {
 		this._proto_killed = val;
 
 		// check for evolution
-		if(this._plants_eaten + this._proto_killed >= this.evo_1_progress){
+		if(this._plants_eaten + this._proto_killed >= this._evo_1_progress){
 			this._prepare_food_evolution();
+		}
+	}
+
+	// Private setup functions
+	_setup_step_1(){
+		app.game.race.genes.push(encyclopedia.genes.get("protocell"));
+
+		this.actions = {
+			explore: {
+				name: 'Explore',
+				description: 'You feel the urge to get new cells in your body.',
+				actions: [new EatCell(), new AbsorbLight(), new OxidateChemicals()]
+			}
+		};
+
+		this.progress = {
+			total: this._evo_1_progress,
+			bars: [
+				{color: 'red', cb: function(){ console.log("hi"); return this._cells_eaten * 2; }},
+				{color: 'green', cb: function(){ return this._light_absorbed * 2 }},
+				{color: 'blue', cb: function(){ return this._chemical_oxidated * 2 }}
+			],
+			progress: {
+				complete: function(){
+					return this._cells_eaten + this._light_absorbed + this._chemical_oxidated >= this._evo_1_progress;
+				},
+				cb: function(){
+					const total = ((this._cells_eaten + this._light_absorbed + this._chemical_oxidated) / this._evo_1_progress) * 100;
+					return Math.min(total, 100);
+				}
+			}
+		};
+		this.show_progress = true;
+	}
+
+	_setup_step_1_2(){
+
+	}
+
+	_prepare_kingdom_evolution(){
+		this.actions['grow'] = {
+			name: "Grow",
+			actions: [new OozeEatPlant(), new OozeHunt()]
 		}
 	}
 

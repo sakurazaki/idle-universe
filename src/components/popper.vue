@@ -1,11 +1,6 @@
 <template>
-  <div v-if="ishtml" ref="dropdown" id="tooltip" role="tooltip" class="popover-custom"
-    v-html="desc + '<div id=\'arrow\' data-popper-arrow></div>'">
-  </div>
-  <div v-if="!ishtml" ref="dropdown" id="tooltip" role="tooltip" class="popover-custom">
-    {{ desc }}
-    <div id="arrow" data-popper-arrow></div>
-  </div>
+  <div v-if="ishtml" ref="dropdown" id="tooltip" role="tooltip" class="popover-custom" v-html="desc"></div>
+  <div v-if="!ishtml" ref="dropdown" id="tooltip" role="tooltip" class="popover-custom">{{ desc }}</div>
 </template>
 
 <script>

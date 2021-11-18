@@ -41,7 +41,7 @@ class MicroOoze extends Race {
 	constructor(){
 		super(0,
 			"Micro Ooze",
-			[genebuilder.get("protoplasm")],
+			[],
 			RaceType.OOZE,
 			"",
 			[ResourceEnum.PROTEIN, ResourceEnum.DNA, ResourceEnum.RNA],

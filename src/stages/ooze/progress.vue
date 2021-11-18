@@ -1,10 +1,11 @@
 <template>
   <div class="evolution-bar">
-    <div class="green-bar" v-bind:style="{width: getPlantWidth() + '%'}"></div>
-    <div class="red-bar" v-bind:style="{width: getProtoWidth() + '%'}"></div>
+    <div class="bar" v-for="(bar, i) in progress.bars" v-bind:key="i" v-bind:class="bar.color"
+      v-bind:style="{width: bar.cb() + '%'}"></div>
   </div>
   <div class="progress-bar">
-    <div class="blue-bar" v-bind:class="{complete: getTotalWidth() == 100}" v-bind:style="{width: getTotalWidth() + '%'}"></div>
+    <div class="bar blue" v-bind:class="{complete: progress.progress.complete()}"
+      v-bind:style="{width: progress.progress.cb() + '%'}"></div>
   </div>
 </template>
 
@@ -12,18 +13,7 @@
 
 export default {
   name: 'EvolutionBar',
-  props: ['stage'],
-  methods: {
-    getPlantWidth(){
-      return this.stage.plants_eaten * 2;
-    },
-    getProtoWidth(){
-      return this.stage.proto_killed * 2;
-    },
-    getTotalWidth(){
-      return Math.min( ( (this.stage.plants_eaten+this.stage.proto_killed) / this.stage.evo_1_progress) * 100, 100);
-    }
-  }
+  props: ['progress']
 }
 </script>
 
@@ -41,27 +31,28 @@ export default {
     white-space: nowrap;
   }
 
-  .evolution-bar > .green-bar {
+  .evolution-bar > .bar {
     display: inline-block;
-    background-color: #00ff0066;
     height: 26px;
     min-height: 26px;
-    border: 1px solid #00ff00;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
     border-right: 0;
   }
 
-  .evolution-bar > .red-bar {
-    margin-left: auto;
-    display: inline-block;
+  .evolution-bar > .bar.green {
+    background-color: #00ff0066;
+    border: 1px solid #00ff00;
+  }
+
+  .evolution-bar > .bar.red {
     background-color: #ff000059;
-    height: 26px;
-    min-height: 26px;
     border: 1px solid red;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-left: 0;
+  }
+
+  .evolution-bar > .bar.blue {
+    background-color: #008ed159;
+    border: 1px solid blue;
   }
 
   .progress-bar {
@@ -79,15 +70,18 @@ export default {
     padding: 1px;
   }
 
-  .progress-bar > .blue-bar {
+  .progress-bar > .bar {
     display: inline-block;
-    background-color: #008ed1;
     height: 14px;
     min-height: 14px;
     border-bottom-left-radius: 5px;
   }
 
-  .progress-bar > .blue-bar.complete {
+  .progress-bar > .bar.blue {
+    background-color: #008ed1;
+  }
+
+  .progress-bar > .bar.blue.complete {
     animation: shine 1s linear 0s infinite;
   }
 

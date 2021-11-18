@@ -3,6 +3,7 @@
 
     <div class="group" v-for="(group, i) in stage.actions" v-bind:key="i">
       <div class="title">{{ group.name }}</div>
+      <div v-if="group.description" class="description" v-html="group.description"></div>
   
       <div class="action-group">
         <div class="action" v-for="(action, j) in group.actions" v-bind:key="`action-${i}_${j}`"
@@ -71,9 +72,14 @@ export default {
     color: #f3c82d;
     font-weight: 600;
     padding-bottom: .2rem;
-    margin-bottom: 1rem;
+    margin-bottom: .5rem;
     border-bottom: 1px solid #ffffff;
     text-transform: capitalize;
+  }
+
+  .group > .description {
+    font-family: "Ubuntu";
+    margin-bottom: 1rem;
   }
 
   .action {
@@ -117,6 +123,15 @@ export default {
 
   .action.red button:hover {
     background-color: #ff000075;
+  }
+
+  .action.blue button {
+    background-color: #005aff3b;
+    border: 1px solid #0089ff;
+  }
+
+  .action.blue button:hover {
+    background-color: #003eb1;
   }
 
   .action.grad-gr button {

@@ -26,11 +26,41 @@ class Gene {
 	info(){ return `[${this.id}]Gene: ${this.name}`; }
 }
 
-class Protoplasm extends Gene {
+class Protocell extends Gene {
 	constructor(){
 		super(0, "Protoplasm",
-			"A exciting new adventure into evolution.",
+			"An exciting new adventure into evolution.",
 			"Allows you to explore different paths.",
+			[GeneType.BASE],
+			0)
+	}
+}
+
+class Phagocyte extends Gene {
+	constructor(){
+		super(1, "Phagocyte",
+			"Devouring others is the path to survival.",
+			"Your first step into the animal kingdom.",
+			[GeneType.BASE],
+			0)
+	}
+}
+
+class Photocyte extends Gene {
+	constructor(){
+		super(2, "Photocyte",
+			"The light provides all the food you need.",
+			"Your first step into the plant kingdom.",
+			[GeneType.BASE],
+			0)
+	}
+}
+
+class Chemocyte extends Gene {
+	constructor(){
+		super(3, "Chemocyte",
+			"Absorbing chemicals in your body strenghtens your molecules.",
+			"Your first step into the abyss kingdom.",
 			[GeneType.BASE],
 			0)
 	}
@@ -38,7 +68,7 @@ class Protoplasm extends Gene {
 
 class Herbivore extends Gene {
 	constructor(){
-		super(1, "Herbivore",
+		super(4, "Herbivore",
 			"You prefer to eat vegetables and won't eat meat.",
 			"Your species won't hunt for food.",
 			[GeneType.BASE],
@@ -48,7 +78,7 @@ class Herbivore extends Gene {
 
 class Carnivore extends Gene {
 	constructor(){
-		super(2, "Carnivore", 
+		super(5, "Carnivore", 
 			"You prefer to eat meat and won't eat vegetables.",
 			"Your species won't engage in agriculture for food.",
 			[GeneType.BASE],
@@ -58,7 +88,7 @@ class Carnivore extends Gene {
 
 class Omnivore extends Gene {
 	constructor(){
-		super(3, "Omnivore", 
+		super(6, "Omnivore", 
 			"You enjoy every source of meal equally.",
 			"Your species will engage in agriculture and hunt for food.",
 			[GeneType.BASE],
@@ -69,7 +99,10 @@ class Omnivore extends Gene {
 class GeneBuilder {
 	constructor(){
 		this.genes = new Map();
-		this.genes.set("protoplasm", new Protoplasm());
+		this.genes.set("protocell", new Protocell());
+		this.genes.set("phagocyte", new Phagocyte());
+		this.genes.set("photocyte", new Photocyte());
+		this.genes.set("chemocyte", new Chemocyte());
 		this.genes.set("herbivore", new Herbivore());
 		this.genes.set("carnivore", new Carnivore());
 		this.genes.set("omnivore", new Omnivore());
