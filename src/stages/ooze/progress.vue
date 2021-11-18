@@ -1,11 +1,11 @@
 <template>
   <div class="evolution-bar">
-    <div class="bar" v-for="(bar, i) in progress.bars" v-bind:key="i" v-bind:class="bar.color"
-      v-bind:style="{width: bar.cb() + '%'}"></div>
+    <div class="bar" v-for="(bar, i) in stage.progress.bars" v-bind:key="i" v-bind:class="bar.color"
+      v-bind:style="{width: getBarWidth(i) + '%'}"></div>
   </div>
   <div class="progress-bar">
-    <div class="bar blue" v-bind:class="{complete: progress.progress.complete()}"
-      v-bind:style="{width: progress.progress.cb() + '%'}"></div>
+    <div class="bar blue" v-bind:class="{complete: stage.progress.progress.complete()}"
+      v-bind:style="{width: stage.progress.progress.cb() + '%'}"></div>
   </div>
 </template>
 
@@ -13,7 +13,12 @@
 
 export default {
   name: 'EvolutionBar',
-  props: ['progress']
+  props: ['stage'],
+  methods: {
+    getBarWidth(index){
+      return this.stage.progress.bars[index].cb();
+    }
+  }
 }
 </script>
 
@@ -35,9 +40,23 @@ export default {
     display: inline-block;
     height: 26px;
     min-height: 26px;
+  }
+
+  .evolution-bar > .bar:first-child {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
     border-right: 0;
+  }
+
+  .evolution-bar > .bar:not(:first-child) {
+    border-right: 0;
+    border-left:  0;
+  }
+
+  .evolution-bar > .bar:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-left: 0;
   }
 
   .evolution-bar > .bar.green {

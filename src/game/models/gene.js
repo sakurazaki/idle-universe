@@ -100,9 +100,9 @@ class GeneBuilder {
 	constructor(){
 		this.genes = new Map();
 		this.genes.set("protocell", new Protocell());
-		this.genes.set("phagocyte", new Phagocyte());
-		this.genes.set("photocyte", new Photocyte());
-		this.genes.set("chemocyte", new Chemocyte());
+		this.genes.set("phagocytosis", new Phagocyte());
+		this.genes.set("photosynthesis", new Photocyte());
+		this.genes.set("chemosynthesis", new Chemocyte());
 		this.genes.set("herbivore", new Herbivore());
 		this.genes.set("carnivore", new Carnivore());
 		this.genes.set("omnivore", new Omnivore());

@@ -6,7 +6,7 @@
     </div>
 
     <div id="actions" class="actions">
-      <EvolutionBar v-if="game.stage.show_progress" :progress="game.stage.progress" />
+      <EvolutionBar v-if="game.stage.show_progress" :stage="game.stage" />
       <Actions :stage="game.stage" />
     </div>
 

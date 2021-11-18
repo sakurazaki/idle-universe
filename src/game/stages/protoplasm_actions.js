@@ -1,6 +1,7 @@
 import { app } from '../../main'
 
 import { Action } from '../models/action'
+import { KingdomEvolutionFork } from './protoplasm'
 
 class Awake extends Action {
 	constructor(){
@@ -55,6 +56,105 @@ class OxidateChemicals extends Action {
 
 	execute(){
 		app.game.stage.chemical_oxidated += 1;
+	}
+}
+
+class EvolvePhagocytosis extends Action {
+	constructor(){
+		const stage = app.game.stage;
+		let description = '';
+		const disabled = stage.cells_eaten < stage.light_absorbed || stage.cells_eaten < stage.chemical_oxidated;
+
+		if(disabled){
+			description = `
+			Your species hasn't tasted the blood of enough living organisms<br />
+			so you're not fit for the a life of organic matter consumption.<br />
+			<br />
+			<span class="evolution-fork-disabled">Evolutionary fork disabled</span>`;
+		} else {
+			description = `
+			Evolve into species that will consume organic matter<br/>as main form of sustenance.<br />
+			<br />
+			<span class="evolution-fork-info">This is a <u>major</u> evolutionary fork</span>`;
+		}
+		
+		super({
+			name: "Phagocytosis",
+			description: description,
+			color: 'red',
+			disabled: disabled,
+			ishtml: true
+		});
+	}
+
+	execute(){
+		app.game.stage.food_evolve(KingdomEvolutionFork.PHAGOCYTOSIS);
+	}
+}
+
+class EvolvePhotosynthesis extends Action {
+	constructor(){
+		const stage = app.game.stage;
+		let description = '';
+		const disabled = stage.light_absorbed < stage.cells_eaten || stage.light_absorbed < stage.chemical_oxidated;
+
+		if(disabled){
+			description = `
+			Your species hasn't paid enough attention to the light<br />
+			and won't be able to extract nutrients from it.<br />
+			<br />
+			<span class="evolution-fork-disabled">Evolutionary fork disabled</span>`;
+		} else {
+			description = `
+			Evolve into species that will use sources of natural light as main form of sustenance.<br />
+			<br />
+			<span class="evolution-fork-info">This is a <u>major</u> evolutionary fork</span>`;
+		}
+		
+		super({
+			name: "Photosynthesis",
+			description: description,
+			color: 'green',
+			disabled: disabled,
+			ishtml: true
+		});
+	}
+
+	execute(){
+		app.game.stage.food_evolve(KingdomEvolutionFork.PHOTOSYNTHESIS);
+	}
+}
+
+class EvolveChemosynthesis extends Action {
+	constructor(){
+		const stage = app.game.stage;
+		let description = '';
+		const disabled = stage.chemical_oxidated < stage.cells_eaten || stage.chemical_oxidated < stage.light_absorbed;
+
+		if(disabled){
+			description = `
+			Your species hasn't oxidize enough organic matter from chemicals<br />
+			and hasnt develooped the ability to get nutrients from it.<br />
+			<br />
+			<span class="evolution-fork-disabled">Evolutionary fork disabled</span>`;
+		} else {
+			description = `
+			Evolve into species that will use sources of oxide chemicals as main form of sustenance.<br />
+			<br />
+			<span class="evolution-fork-info">This is a <u>major</u> evolutionary fork</span>`;
+		}
+		
+		super({
+			name: "Chemosynthesis",
+			description: description,
+			color: 'blue',
+			disabled: disabled,
+			ishtml: true
+		});
+	}
+
+	execute(){
+		app.game.stage.food_evolve(KingdomEvolutionFork.CHEMOSYNTHESIS);
 	}
 }
 
@@ -174,6 +274,9 @@ export {
 	AbsorbLight,
 	OxidateChemicals,
 	OozeEatPlant,
+	EvolvePhagocytosis,
+	EvolvePhotosynthesis,
+	EvolveChemosynthesis,
 	OozeHunt,
 	EvolveHerbivore,
 	EvolveCarnivore,

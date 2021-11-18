@@ -8,6 +8,9 @@ import {
 	AbsorbLight,
 	OxidateChemicals,
 	OozeEatPlant,
+	EvolvePhagocytosis,
+	EvolvePhotosynthesis,
+	EvolveChemosynthesis,
 	OozeHunt,
 	EvolveHerbivore,
 	EvolveCarnivore,
@@ -18,6 +21,12 @@ import {
 const ProtoPhase = {
 	KINGDOM: 'kingdom',
 	FOOD: 'food'
+}
+
+const KingdomEvolutionFork = {
+	PHAGOCYTOSIS: "phagocytosis",
+	PHOTOSYNTHESIS: "photosynthesis",
+	CHEMOSYNTHESIS: "chemosynthesis"
 }
 
 class ProtoplasmPhase {
@@ -136,9 +145,11 @@ class ProtoplasmPhase {
 
 	// Private setup functions
 	_setup_step_1(){
+		const stage = this;
+
 		app.game.race.genes.push(encyclopedia.genes.get("protocell"));
 
-		this.actions = {
+		stage.actions = {
 			explore: {
 				name: 'Explore',
 				description: 'You feel the urge to get new cells in your body.',
@@ -146,28 +157,49 @@ class ProtoplasmPhase {
 			}
 		};
 
-		this.progress = {
-			total: this._evo_1_progress,
+		stage.progress = {
+			total: stage._evo_1_progress,
 			bars: [
-				{color: 'red', cb: function(){ console.log("hi"); return this._cells_eaten * 2; }},
-				{color: 'green', cb: function(){ return this._light_absorbed * 2 }},
-				{color: 'blue', cb: function(){ return this._chemical_oxidated * 2 }}
+				{color: 'red', cb: function(){ return stage.cells_eaten * 2; }},
+				{color: 'green', cb: function(){ return stage.light_absorbed * 2; }},
+				{color: 'blue', cb: function(){ return stage.chemical_oxidated * 2; }}
 			],
 			progress: {
 				complete: function(){
-					return this._cells_eaten + this._light_absorbed + this._chemical_oxidated >= this._evo_1_progress;
+					return stage.cells_eaten + stage.light_absorbed + stage.chemical_oxidated >= stage._evo_1_progress;
 				},
 				cb: function(){
-					const total = ((this._cells_eaten + this._light_absorbed + this._chemical_oxidated) / this._evo_1_progress) * 100;
+					const total = ((stage.cells_eaten + stage.light_absorbed + stage.chemical_oxidated) / stage._evo_1_progress) * 100;
 					return Math.min(total, 100);
 				}
 			}
 		};
-		this.show_progress = true;
+		stage.show_progress = true;
 	}
 
 	_setup_step_1_2(){
+		const stage = this;
 
+		stage.actions = {
+			evolve: {
+				name: 'Evolve',
+				description: 'You can feel a change within your nucleus.<br />A new path is opening...',
+				actions: [new EvolvePhagocytosis(), new EvolvePhotosynthesis(), new EvolveChemosynthesis()]
+			}
+		};
+	}
+
+	kingdom_fork_evolution(choice){
+		//const stage = this;
+
+		switch(choice){
+			case KingdomEvolutionFork.PHAGOCYTOSIS:
+				app.game.race.genes.push(encyclopedia.genes.get(choice));
+				break;
+
+			default:
+				break;
+		}
 	}
 
 	_prepare_kingdom_evolution(){
@@ -194,4 +226,4 @@ class ProtoplasmPhase {
 	}
 }
 
-export { ProtoplasmPhase }
+export { KingdomEvolutionFork, ProtoplasmPhase }
