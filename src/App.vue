@@ -19,6 +19,9 @@ export default {
     return {
       game: get_game()
     }
+  },
+  mounted(){
+    this.game.init();
   }
 }
 </script>

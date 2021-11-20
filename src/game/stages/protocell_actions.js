@@ -1,7 +1,7 @@
 import { app } from '../../main'
 
 import { Action } from '../models/action'
-import { KingdomEvolutionFork } from './protoplasm'
+import { KingdomEvolutionFork } from './protocell'
 
 class Awake extends Action {
 	constructor(){
@@ -48,7 +48,7 @@ class AbsorbLight extends Action {
 class OxidateChemicals extends Action {
 	constructor(){
 		super({
-			name: "Oxidate Chemicals",
+			name: "Metabolize  Chemicals",
 			description: "Turn carbon-based chemicals into organic matter.",
 			color: 'blue'
 		});
@@ -68,7 +68,7 @@ class EvolvePhagocytosis extends Action {
 		if(disabled){
 			description = `
 			Your species hasn't tasted the blood of enough living organisms<br />
-			so you're not fit for the a life of organic matter consumption.<br />
+			so you're not fit for the life of organic matter consumption.<br />
 			<br />
 			<span class="evolution-fork-disabled">Evolutionary fork disabled</span>`;
 		} else {
@@ -88,7 +88,7 @@ class EvolvePhagocytosis extends Action {
 	}
 
 	execute(){
-		app.game.stage.food_evolve(KingdomEvolutionFork.PHAGOCYTOSIS);
+		app.game.stage.kingdom_fork_evolution(KingdomEvolutionFork.PHAGOCYTOSIS);
 	}
 }
 
@@ -121,7 +121,7 @@ class EvolvePhotosynthesis extends Action {
 	}
 
 	execute(){
-		app.game.stage.food_evolve(KingdomEvolutionFork.PHOTOSYNTHESIS);
+		app.game.stage.kingdom_fork_evolution(KingdomEvolutionFork.PHOTOSYNTHESIS);
 	}
 }
 
@@ -134,7 +134,7 @@ class EvolveChemosynthesis extends Action {
 		if(disabled){
 			description = `
 			Your species hasn't oxidize enough organic matter from chemicals<br />
-			and hasnt develooped the ability to get nutrients from it.<br />
+			and hasnt developed the ability to get nutrients from it.<br />
 			<br />
 			<span class="evolution-fork-disabled">Evolutionary fork disabled</span>`;
 		} else {
@@ -154,35 +154,7 @@ class EvolveChemosynthesis extends Action {
 	}
 
 	execute(){
-		app.game.stage.food_evolve(KingdomEvolutionFork.CHEMOSYNTHESIS);
-	}
-}
-
-class OozeEatPlant extends Action {
-	constructor(){
-		super({
-			name: "Eat Plants",
-			description: "Find plant based matter around you and consume it.",
-			color: 'green'
-		});
-	}
-
-	execute(){
-		app.game.stage.plants_eaten += 1;
-	}
-}
-
-class OozeHunt extends Action {
-	constructor(){
-		super({
-			name: "Hunt organisms",
-			description: "Hunt other living organisms and cosume their corpses.",
-			color: 'red'
-		});
-	}
-
-	execute(){
-		app.game.stage.proto_killed += 1;
+		app.game.stage.kingdom_fork_evolution(KingdomEvolutionFork.CHEMOSYNTHESIS);
 	}
 }
 
@@ -273,11 +245,9 @@ export {
 	EatCell,
 	AbsorbLight,
 	OxidateChemicals,
-	OozeEatPlant,
 	EvolvePhagocytosis,
 	EvolvePhotosynthesis,
 	EvolveChemosynthesis,
-	OozeHunt,
 	EvolveHerbivore,
 	EvolveCarnivore,
 	EvolveOmnivore

@@ -1,4 +1,5 @@
 const ResourceEnum = {
+	SATIETY: 'Satiety',
 	PROTEIN: 'Protein',
 	DNA: 'DNA',
 	RNA: 'RNA',

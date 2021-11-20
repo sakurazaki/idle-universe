@@ -50,15 +50,20 @@ export default {
       if(!action.disabled)
         action.execute();
     }
+  },
+  updated(){
+    this.$nextTick(function () {
+      // Sometimes clicking on a button will make it dissapear
+      // So we need to cleanup the Popper just in case.
+      if(!this.$refs[this.popperRef]){
+        this.popperRef = null;
+      }
+    })
   }
 }
 </script>
 
 <style scoped>
-  .action-list {
-    margin-top: 1rem;
-  }
-
   .group {
     margin-top: 1rem;
   }

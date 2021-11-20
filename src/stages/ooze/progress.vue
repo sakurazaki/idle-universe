@@ -78,6 +78,7 @@ export default {
     width: 98%;
     margin-left: 10px;
     margin-top: -3px;
+    margin-bottom: .5rem;
     z-index: -1;
     height: 14px;
     min-height: 14px;

@@ -11,6 +11,7 @@
     </div>
 
     <div id="info" class="info">
+      <Resources :game="game" />
     </div>
 
   </div>
@@ -21,6 +22,7 @@
 import Evolution from './evolution'
 import EvolutionBar from './progress'
 import Actions from './actions'
+import Resources from './resources'
 
 export default {
   name: 'OozeStage',
@@ -28,7 +30,8 @@ export default {
   components: {
     Evolution,
     EvolutionBar,
-    Actions
+    Actions,
+    Resources
   }
 }
 </script>

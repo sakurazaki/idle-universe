@@ -7,15 +7,22 @@ import {
 	EatCell,
 	AbsorbLight,
 	OxidateChemicals,
-	OozeEatPlant,
 	EvolvePhagocytosis,
 	EvolvePhotosynthesis,
 	EvolveChemosynthesis,
-	OozeHunt,
 	EvolveHerbivore,
 	EvolveCarnivore,
 	EvolveOmnivore
-} from './protoplasm_actions'
+} from './protocell_actions'
+
+import {
+	Satiety,
+	DNA,
+	RNA,
+	Protein
+} from '../models/resource'
+
+import { ResourceEnum } from '../models/enums'
 
 
 const ProtoPhase = {
@@ -29,7 +36,7 @@ const KingdomEvolutionFork = {
 	CHEMOSYNTHESIS: "chemosynthesis"
 }
 
-class ProtoplasmPhase {
+class ProtocellPhase {
 	constructor(){
 		this.name = 'Protoplasm';
 
@@ -50,6 +57,8 @@ class ProtoplasmPhase {
 		};
 
 		// Kingdom stage
+		this.population = 0; // you start with 1 cell always however we dont get 1 until step 2
+		this._population_death_rate = 0; // used to determine pop dying when food is 0
 
 		// Step 1
 		this._cells_eaten = 0;
@@ -58,9 +67,16 @@ class ProtoplasmPhase {
 		this._evo_1_progress = 50;
 
 		// Step 2
-		this._plants_eaten = 0;
-		this._proto_killed = 0;
+		this.cells_killed = 0;
+		this.plants_eaten = 0;
+		this.vaporized = 0;
+		this.dissolved = 0;
+		this.evo_2_progress = 1200;
 		
+	}
+
+	// Function called every .1s
+	update(){
 	}
 
 	// Step regulator
@@ -73,6 +89,8 @@ class ProtoplasmPhase {
 
 		if(this._step == 1){
 			this._setup_step_1();
+		} else if(this._step == 2){
+			this._setup_step_2();
 		}
 	}
 
@@ -116,34 +134,6 @@ class ProtoplasmPhase {
 		}
 	}
 
-	// Step 2
-	get plants_eaten(){
-		return this._plants_eaten;
-	}
-
-	set plants_eaten(val){
-		this._plants_eaten = val;
-
-		// check for evolution
-		if(this._plants_eaten + this._proto_killed >= this._evo_1_progress){
-			this._prepare_food_evolution();
-		}
-	}
-
-	get proto_killed(){
-		return this._proto_killed;
-	}
-
-	set proto_killed(val){
-		this._proto_killed = val;
-
-		// check for evolution
-		if(this._plants_eaten + this._proto_killed >= this._evo_1_progress){
-			this._prepare_food_evolution();
-		}
-	}
-
-	// Private setup functions
 	_setup_step_1(){
 		const stage = this;
 
@@ -190,25 +180,69 @@ class ProtoplasmPhase {
 	}
 
 	kingdom_fork_evolution(choice){
-		//const stage = this;
+		const stage = this;
+		app.game.race.genes.pop();
 
 		switch(choice){
 			case KingdomEvolutionFork.PHAGOCYTOSIS:
 				app.game.race.genes.push(encyclopedia.genes.get(choice));
 				break;
 
+			case KingdomEvolutionFork.PHOTOSYNTHESIS:
+				app.game.race.genes.push(encyclopedia.genes.get(choice));
+				break;
+
+			case KingdomEvolutionFork.CHEMOSYNTHESIS:
+				app.game.race.genes.push(encyclopedia.genes.get(choice));
+				break;
+
 			default:
 				break;
 		}
+
+		stage.show_progress = false;
+		stage.progress = null;
+		delete stage.actions['evolve'];
+
+		this.step += 1;
 	}
 
-	_prepare_kingdom_evolution(){
-		this.actions['grow'] = {
-			name: "Grow",
-			actions: [new OozeEatPlant(), new OozeHunt()]
-		}
+	// Kingdom - Step 2
+	_setup_step_2(){
+		const stage = this;
+
+		this.population = 1;
+
+		stage.actions = {
+			explore: {
+				name: 'Explore',
+				description: 'The world has expanded around you. Take a long look and discover new fundaments of life.',
+				actions: []
+			},
+			evolve: {
+				name: 'Evolve',
+				description: 'Using the power of genetics start improving yourself and expanding your species.',
+				actions: []
+			}
+		};
+
+		const satiety = new Satiety();
+		satiety.add_dps({'source': 'population', value: () => this.population});
+		app.game.resources[ResourceEnum.SATIETY] = satiety;
+
+		const dna = new DNA();
+		dna.add_rps({'source': 'population', value: () => this.population});
+		app.game.resources[ResourceEnum.DNA] = dna;
+
+		app.game.resources[ResourceEnum.RNA] = new RNA();
+		app.game.resources[ResourceEnum.PROTEIN] = new Protein();
+
+		app.game.race.genes.forEach((gene) => {
+			gene.apply(this);
+		});
 	}
 
+	// Private setup functions
 	_prepare_food_evolution(){
 		this.actions['evolve'] = {
 			name: 'Evolve in the food chain',
@@ -226,4 +260,4 @@ class ProtoplasmPhase {
 	}
 }
 
-export { KingdomEvolutionFork, ProtoplasmPhase }
+export { KingdomEvolutionFork, ProtocellPhase }

@@ -1,22 +1,31 @@
 import { encyclopedia } from './encyclopedia'
 
-import { Resource } from './models/resource'
-
-import { ProtoplasmPhase } from './stages/protoplasm'
+import { ProtocellPhase } from './stages/protocell'
 
 class Game {
   constructor () {
+
+    this._update_cycle = null;
+
     this.universe = encyclopedia.universes.get("standard");
     this.planet = encyclopedia.planets.get("earth");
     this.race = encyclopedia.races.get("micro_ooze");
 
     this.resources = {};
-    this.race.primary_sources.forEach((name) => {
-      this.resources[name] = new Resource(name);
+    this.stage = new ProtocellPhase();
+
+  }
+
+  init(){
+    this._update_cycle = setInterval(() => {this.update();}, 100);
+  }
+
+  update(){
+    this.stage.update();
+
+    Object.entries(this.resources).forEach((resource) => {
+      resource[1].update();
     });
-
-    this.stage = new ProtoplasmPhase();
-
   }
 }
 

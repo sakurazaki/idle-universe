@@ -9,8 +9,8 @@
     Progress
   </div>
     <div class="settings-header">
-      <a href="https://github.com/sakurazaki/idle-universe">Github</a> |
-      <a href="https://discord.gg/R2FsdNn29A">Discord</a>
+      <a href="https://github.com/sakurazaki/idle-universe" target="_blank">Github</a> |
+      <a href="https://discord.gg/R2FsdNn29A" target="_blank">Discord</a>
     </div>
   </header>
 </template>
